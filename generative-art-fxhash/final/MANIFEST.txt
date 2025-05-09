@@ -1,0 +1,33 @@
+# FXHASH Upload Manifest
+
+## Files Included in Upload
+
+1. index.html - Main HTML entry point
+2. style.css - CSS for styling and responsiveness
+3. sketch.js - Main generative art logic
+4. fxhash-snippet.js - FXHASH integration code
+5. symbols.js - Extracted symbols from toxiExample.txt
+6. README.md - Project documentation
+
+## Project Structure
+```
+/
+├── index.html        # Main entry point
+├── style.css         # CSS styling
+├── sketch.js         # Main generative art logic
+├── fxhash-snippet.js # FXHASH integration code
+├── symbols.js        # Symbols extracted from toxiExample.txt
+└── README.md         # Project documentation
+```
+
+## Upload Instructions
+1. Zip all files in this directory
+2. Upload the zip file to FXHASH platform
+3. Follow FXHASH minting instructions
+
+## Project Features
+- Infinite, glitchy generative art
+- Responsive design for all screen sizes
+- Over 500,000 unique variations
+- Continuous movement and animation
+- Varied colors without flashing

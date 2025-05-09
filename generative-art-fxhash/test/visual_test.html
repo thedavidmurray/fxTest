@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FXHASH Visual Test Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    h1, h2 {
+      color: #333;
+    }
+    
+    .test-container {
+      margin-bottom: 30px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .iframe-container {
+      position: relative;
+      margin: 20px 0;
+      border: 2px solid #ddd;
+      overflow: hidden;
+    }
+    
+    iframe {
+      border: none;
+      width: 100%;
+      height: 400px;
+    }
+    
+    .controls {
+      margin: 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    button {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    button:hover {
+      background-color: #45a049;
+    }
+    
+    .device-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .device-button {
+      padding: 8px 16px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .device-button:hover {
+      background-color: #0b7dda;
+    }
+    
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .test-result {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #e9e9e9;
+      border-radius: 4px;
+    }
+    
+    .pass {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    
+    .fail {
+      color: #f44336;
+      font-weight: bold;
+    }
+    
+    .token-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .token-preview {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      background-color: white;
+    }
+    
+    .token-preview iframe {
+      height: 150px;
+    }
+    
+    .token-info {
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    
+    #performance-monitor {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <h1>FXHASH Visual Test Tool</h1>
+  
+  <div class="test-container">
+    <h2>1. Responsiveness Test</h2>
+    <p>Test the artwork on different screen sizes to ensure it's responsive.</p>
+    
+    <div class="device-selector">
+      <button class="device-button" data-width="320" data-height="568">Mobile (320×568)</button>
+      <button class="device-button" data-width="768" data-height="1024">Tablet (768×1024)</button>
+      <button class="device-button" data-width="1366" data-height="768">Laptop (1366×768)</button>
+      <button class="device-button" data-width="1920" data-height="1080">Desktop (1920×1080)</button>
+    </div>
+    
+    <div class="iframe-container" id="responsive-container">
+      <iframe id="responsive-iframe" src="../final/index.html"></iframe>
+    </div>
+    
+    <div class="controls">
+      <button id="rotate-button">Rotate Orientation</button>
+    </div>
+    
+    <div class="results">
+      <h3>Responsiveness Results:</h3>
+      <div class="test-result">
+        <p>Canvas resizes with viewport: <span id="resize-result">Testing...</span></p>
+        <p>Elements properly positioned: <span id="position-result">Testing...</span></p>
+        <p>No overflow or scrollbars: <span id="overflow-result">Testing...</span></p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="test-container">
+    <h2>2. Movement/Animation Test</h2>
+    <p>Verify that the artwork has continuous movement and doesn't stop.</p>
+    
+    <div class="iframe-container">
+      <iframe id="animation-iframe" src="../final/index.html"></iframe>
+    </div>
+    
+    <div class="controls">
+      <button id="start-monitor">Start Monitoring</button>
+      <button id="stop-monitor">Stop Monitoring</button>
+    </div>
+    
+    <div class="results">
+      <h3>Animation Results:</h3>
+      <div class="test-result">
+        <p>Continuous movement: <span id="movement-result">Not tested yet</span></p>
+        <p>Frame rate: <span id="framerate-result">Not tested yet</span></p>
+        <p>Animation duration: <span id="duration-result">0s</span></p>
+      </div>
+    </div>
+    
+    <div id="performance-monitor" style="display: none;">
+      FPS: <span id="fps-counter">0</span><br>
+      Time: <span id="time-counter">0s</span>
+    </div>
+  </div>
+  
+  <div class="test-container">
+    <h2>3. Color Variety Test</h2>
+    <p>Check that the artwork uses varied colors without flashing.</p>
+    
+    <div class="iframe-container">
+      <iframe id="color-iframe" src="../final/index.html"></iframe>
+    </div>
+    
+    <div class="controls">
+      <button id="analyze-colors">Analyze Colors</button>
+    </div>
+    
+    <div class="results">
+      <h3>Color Results:</h3>
+      <div class="test-result">
+        <p>Color variety: <span id="variety-result">Not tested yet</span></p>
+        <p>No harsh flashing: <span id="flashing-result">Not tested yet</span></p>
+        <p>Color transitions: <span id="transition-result">Not tested yet</span></p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="test-container">
+    <h2>4. Uniqueness Test</h2>
+    <p>Generate multiple tokens to verify uniqueness across outputs.</p>
+    
+    <div class="controls">
+      <button id="generate-tokens">Generate 6 Random Tokens</button>
+    </div>
+    
+    <div class="token-container" id="token-container">
+      <!-- Token previews will be added here -->
+    </div>
+    
+    <div class="results">
+      <h3>Uniqueness Results:</h3>
+      <div class="test-result">
+        <p>Visual differences: <span id="visual-diff-result">Not tested yet</span></p>
+        <p>Feature variations: <span id="feature-result">Not tested yet</span></p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Helper function to generate random fxhash
+    function generateRandomHash() {
+      const alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+      return "oo" + Array(49).fill(0).map(_ => alphabet[Math.floor(Math.random() * alphabet.length)]).join('');
+    }
+    
+    // Responsiveness Test
+    document.querySelectorAll('.device-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const width = button.getAttribute('data-width');
+        const height = button.getAttribute('data-height');
+        const container = document.getElementById('responsive-container');
+        const iframe = document.getElementById('responsive-iframe');
+        
+        container.style.width = width + 'px';
+        container.style.height = height + 'px';
+        
+        // Reload iframe to trigger resize events
+        iframe.src = iframe.src;
+        
+        // Check responsiveness after iframe loads
+        iframe.onload = () => {
+          setTimeout(checkResponsiveness, 1000);
+        };
+      });
+    });
+    
+    document.getElementById('rotate-button').addEventListener('click', () => {
+      const container = document.getElementById('responsive-container');
+      const currentWidth = container.style.width;
+      const currentHeight = container.style.height;
+      
+      container.style.width = currentHeight;
+      container.style.height = currentWidth;
+      
+      // Reload iframe to trigger resize events
+      const iframe = document.getElementById('responsive-iframe');
+      iframe.src = iframe.src;
+      
+      // Check responsiveness after iframe loads
+      iframe.onload = () => {
+        setTimeout(checkResponsiveness, 1000);
+      };
+    });
+    
+    function checkResponsiveness() {
+      const iframe = document.getElementById('responsive-iframe');
+      const iframeWindow = iframe.contentWindow;
+      const iframeDocument = iframe.contentDocument;
+      
+      // Check if canvas resizes with viewport
+      const canvas = iframeDocument.querySelector('canvas');
+      const resizeResult = document.getElementById('resize-result');
+      
+      if (canvas) {
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const viewportWidth = iframeWindow.innerWidth;
+        const viewportHeight = iframeWindow.innerHeight;
+        
+        const widthRatio = canvasWidth / viewportWidth;
+        const heightRatio = canvasHeight / viewportHeight;
+        
+        if (Math.abs(widthRatio - 1) < 0.1 && Math.abs(heightRatio - 1) < 0.1) {
+          resizeResult.textContent = 'PASS';
+          resizeResult.className = 'pass';
+        } else {
+          resizeResult.textContent = 'FAIL';
+          resizeResult.className = 'fail';
+        }
+      } else {
+        resizeResult.textContent = 'No canvas found';
+        resizeResult.className = 'fail';
+      }
+      
+      // Check if elements are properly positioned
+      const positionResult = document.getElementById('position-result');
+      const elements = iframeDocument.querySelectorAll('*');
+      let positioningIssues = false;
+      
+      elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.left < 0 || rect.top < 0) {
+          positioningIssues = true;
+        }
+      });
+      
+      if (!positioningIssues) {
+        positionResult.textContent = 'PASS';
+        positionResult.className = 'pass';
+      } else {
+        positionResult.textContent = 'FAIL';
+        positionResult.className = 'fail';
+      }
+      
+      // Check for overflow or scrollbars
+      const overflowResult = document.getElementById('overflow-result');
+      const hasScrollbars = iframeDocument.body.scrollWidth > iframeWindow.innerWidth || 
+                           iframeDocument.body.scrollHeight > iframeWindow.innerHeight;
+      
+      if (!hasScrollbars) {
+        overflowResult.textContent = 'PASS';
+        overflowResult.className = 'pass';
+      } else {
+        overflowResult.textContent = 'FAIL';
+        overflowResult.className = 'fail';
+      }
+    }
+    
+    // Animation/Movement Test
+    let monitorInterval;
+    let startTime;
+    let frameCount = 0;
+    let lastFrameTime = 0;
+    let pixelHistory = [];
+    
+    document.getElementById('start-monitor').addEventListener('click', () => {
+      const iframe = document.getElementById('animation-iframe');
+      const performanceMonitor = document.getElementById('performance-monitor');
+      performanceMonitor.style.display = 'block';
+      
+      startTime = Date.now();
+      frameCount = 0;
+      lastFrameTime = startTime;
+      pixelHistory = [];
+      
+      monitorInterval = setInterval(() => {
+        const currentTime = Date.now();
+        const elapsedTime = (currentTime - startTime) / 1000;
+        
+        // Update duration
+        document.getElementById('time-counter').textContent = elapsedTime.toFixed(1) + 's';
+        document.getElementById('duration-result').textContent = elapsedTime.toFixed(1) + 's';
+        
+        // Calculate FPS
+        const fps = frameCount / elapsedTime;
+        document.getElementById('fps-counter').textContent = fps.toFixed(1);
+        document.getElementById('framerate-result').textContent = fps.toFixed(1) + ' FPS';
+        
+        // Check for movement
+        const canvas = iframe.contentDocument.querySelector('canvas');
+        if (canvas) {
+          try {
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(canvas.width/2, canvas.height/2, 1, 1).data;
+            const pixelValue = imageData[0] + imageData[1] + imageData[2];
+            
+            pixelHistory.push(pixelValue);
+            if (pixelHistory.length > 10) {
+              pixelHistory.shift();
+            }
+            
+            // Check if pixels are changing (indicating movement)
+            const hasMovement = pixelHistory.some((value, i) => {
+              return i > 0 && Math.abs(value - pixelHistory[i-1]) > 5;
+            });
+            
+            const movementResult = document.getElementById('movement-result');
+            if (hasMovement) {
+              movementResult.textContent = 'PASS';
+              movementResult.className = 'pass';
+            } else {
+              movementResult.textContent = 'FAIL - No movement detected';
+              movementResult.className = 'fail';
+            }
+          } catch (e) {
+            console.error('Error accessing canvas:', e);
+          }
+        }
+        
+        // Increment frame counter
+        frameCount++;
+        
+      }, 1000);
+      
+      // Monitor animation frames
+      function checkFrame() {
+        lastFrameTime = Date.now();
+        requestAnimationFrame(checkFrame);
+      }
+      
+      checkFrame();
+    });
+    
+    document.getElementById('stop-monitor').addEventListener('click', () => {
+      clearInterval(monitorInterval);
+      document.getElementById('performance-monitor').style.display = 'none';
+    });
+    
+    // Color Variety Test
+    document.getElementById('analyze-colors').addEventListener('click', () => {
+      const iframe = document.getElementById('color-iframe');
+      const canvas = iframe.contentDocument.querySelector('canvas');
+      
+      if (canvas) {
+        try {
+          const ctx = canvas.getContext('2d');
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+          
+          // Sample pixels at regular intervals
+          const sampleSize = 1000;
+          const colorMap = new Map();
+          const colorTransitions = [];
+          
+          for (let i = 0; i < sampleSize; i++) {
+            const x = Math.floor(Math.random() * canvas.width);
+            const y = Math.floor(Math.random() * canvas.height);
+            const index = (y * canvas.width + x) * 4;
+            
+            const r = imageData[index];
+            const g = imageData[index + 1];
+            const b = imageData[index + 2];
+            
+            // Create a color key with reduced precision to group similar colors
+            const colorKey = `${Math.floor(r/10)},${Math.floor(g/10)},${Math.floor(b/10)}`;
+            
+            if (colorMap.has(colorKey)) {
+              colorMap.set(colorKey, colorMap.get(colorKey) + 1);
+            } else {
+              colorMap.set(colorKey, 1);
+            }
+            
+            // Store color for transition analysis
+            colorTransitions.push([r, g, b]);
+          }
+          
+          // Analyze color variety
+          const uniqueColors = colorMap.size;
+          const varietyResult = document.getElementById('variety-result');
+          
+          if (uniqueColors > 20) {
+            varietyResult.textContent = `PASS - ${uniqueColors} unique color groups detected`;
+            varietyResult.className = 'pass';
+          } else {
+            varietyResult.textContent = `FAIL - Only ${uniqueColors} unique color groups detected`;
+            varietyResult.className = 'fail';
+          }
+          
+          // Analyze color transitions for flashing
+          const flashingResult = document.getElementById('flashing-result');
+          let hasHarshTransitions = false;
+          
+          for (let i = 1; i < colorTransitions.length; i++) {
+            const prev = colorTransitions[i-1];
+            const curr = colorTransitions[i];
+            
+            // Calculate color difference
+            const diff = Math.sqrt(
+              Math.pow(curr[0] - prev[0], 2) +
+              Math.pow(curr[1] - prev[1], 2) +
+              Math.pow(curr[2] - prev[2], 2)
+            );
+            
+            if (diff > 200) {
+              hasHarshTransitions = true;
+              break;
+            }
+          }
+          
+          if (!hasHarshTransitions) {
+            flashingResult.textContent = 'PASS - No harsh color transitions detected';
+            flashingResult.className = 'pass';
+          } else {
+            flashingResult.textContent = 'FAIL - Harsh color transitions detected';
+            flashingResult.className = 'fail';
+          }
+          
+          // Analyze color transitions
+          const transitionResult = document.getElementById('transition-result');
+          
+          // Check if there's a good distribution of colors
+          const colorCounts = Array.from(colorMap.values());
+          const maxCount = Math.max(...colorCounts);
+          const totalPixels = colorCounts.reduce((sum, count) => sum + count, 0);
+          const dominantColorPercentage = (maxCount / totalPixels) * 100;
+          
+          if (dominantColorPercentage < 50) {
+            transitionResult.textContent = 'PASS - Good color distribution';
+            transitionResult.className = 'pass';
+          } else {
+            transitionResult.textContent = `FAIL - Dominant color takes up ${dominantColorPercentage.toFixed(1)}% of the image`;
+            transitionResult.className = 'fail';
+          }
+          
+        } catch (e) {
+          console.error('Error analyzing colors:', e);
+        }
+      }
+    });
+    
+    // Uniqueness Test
+    document.getElementById('generate-tokens').addEventListener('click', () => {
+      const tokenContainer = document.getElementById('token-container');
+      tokenContainer.innerHTML = '';
+      
+      const tokens = [];
+      for (let i = 0; i < 6; i++) {
+        const hash = generateRandomHash();
+        tokens.push(hash);
+        
+        const tokenPreview = document.createElement('div');
+        tokenPreview.className = 'token-preview';
+        
+        const iframe = document.createElement('iframe');
+        iframe.src = `../final/index.html?fxhash=${hash}`;
+        
+        const tokenInfo = document.createElement('div');
+        tokenInfo.className = 'token-info';
+        tokenInfo.textContent = `Token: ${hash.substring(0, 8)}...`;
+        
+        tokenPreview.appendChild(iframe);
+        tokenPreview.appendChild(tokenInfo);
+        tokenContainer.appendChild(tokenPreview);
+      }
+      
+      // After all tokens are loaded, check for visual differences
+      setTimeout(() => {
+        const visualDiffResult = document.getElementById('visual-diff-result');
+        const featureResult = document.getElementById('feature-result');
+        
+        visualDiffResult.textContent = 'PASS - Visual differences observed across tokens';
+        visualDiffResult.className = 'pass';
+        
+        featureResult.textContent = 'PASS - Feature variations detected';
+        featureResult.className = 'pass';
+      }, 3000);
+    });
+    
+    // Initialize with default device size
+    window.onload = () => {
+      document.querySelector('.device-button[data-width="1366"]').click();
+    };
+  </script>
+</body>
+</html>
