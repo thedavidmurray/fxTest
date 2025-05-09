@@ -1,0 +1,72 @@
+/* Reset default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set up the body to fill the entire viewport */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+  font-family: monospace;
+}
+
+/* Style for the canvas element that will be created by JavaScript */
+canvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure the page is responsive */
+@media screen and (max-width: 768px) {
+  /* Adjust styles for smaller screens if needed */
+  /* The canvas will automatically resize based on the window dimensions */
+}
+
+/* Prevent text selection for better user experience */
+body {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+}
+
+/* Style for any UI elements that might be added later */
+.ui-element {
+  position: absolute;
+  z-index: 10;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Animation for any loading states */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Ensure high contrast for accessibility */
+.high-contrast {
+  filter: contrast(120%);
+}
+
+/* Prevent flickering on some browsers */
+body {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}

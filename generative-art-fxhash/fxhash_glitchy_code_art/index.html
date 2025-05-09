@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glitchy Code Art</title>
+  
+  <!-- FXHASH SNIPPET -->
+  <script id="fxhash-snippet">
+    //---- do not edit the following code (you can indent as you wish)
+    let search = new URLSearchParams(window.location.search)
+    let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+    let fxhash = search.get('fxhash') || "oo" + Array(49).fill(0).map(_ => alphabet[(Math.random() * alphabet.length) | 0]).join('')
+    let fxrand = sfc32(...search.get('fxrand') ? search.get('fxrand').split(',').map(Number) : [])
+    
+    // true if preview mode active, false otherwise
+    // you can append preview=1 to the URL to simulate preview active
+    let fxpreview = search.get('preview') === "1"
+    
+    // call this method to trigger the preview
+    function fxpreview() {
+      console.log("fxpreview")
+      window.dispatchEvent(new Event("fxhash-preview"))
+      setTimeout(() => fxpreview(), 500)
+    }
+    
+    // Pseudo-random number generator
+    function sfc32(a, b, c, d) {
+      return function() {
+        a |= 0; b |= 0; c |= 0; d |= 0
+        var t = (a + b | 0) + d | 0
+        d = d + 1 | 0
+        a = b ^ b >>> 9
+        b = c + (c << 3) | 0
+        c = c << 21 | c >>> 11
+        c = c + t | 0
+        return (t >>> 0) / 4294967296
+      }
+    }
+    
+    // Set the token hash in the DOM
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.setAttribute('data-fxhash', fxhash)
+    })
+    
+    // Disable right-click
+    document.addEventListener('contextmenu', (e) => e.preventDefault())
+    
+    // FXHash features
+    window.$fxhashFeatures = {}
+  </script>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- The canvas will be created by JavaScript -->
+  
+  <!-- Load symbols utility -->
+  <script>
+    // Symbols extracted from toxiExample.txt
+    const symbols = {
+      "alphanumeric": [
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
+        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
+        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+      ],
+      "punctuation": [
+        "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
+        ":", ";", "<", "=", ">", "?", "[", "]", "^", "_", "`", "{", "|", "}", "~"
+      ],
+      "special": [
+        "∞"
+      ],
+      "visualPatterns": [
+        "))," , ">>>", "]),", "(...", "===", "[[.", "]],", "`${", "!==", ")))"
+      ],
+      "codePatterns": [
+        "function", "=>", "class", "const", "let", "var", "for", "while", "if", "else",
+        "return", "this", "new", "import", "export", "default", "try", "catch"
+      ],
+      "colors": {
+        "names": [
+          "yellow", "pink", "blue", "grey", "purple", "gray", 
+          "white", "black", "orange", "brown", "red", "green"
+        ]
+      },
+      "commonSequences": [
+        "   ", "    ", "     ", "\n  ", "\n   ", "\n    ", " = ", ", ", "t, ",
+        ",\n ", ",\n  ", ",\n   ", " => ", "{\n  ", "{\n   ", " {\n  "
+      ]
+    };
+
+    // Helper functions for using symbols in generative art
+    const symbolUtils = {
+      // Get a random symbol from a specific category
+      getRandomSymbol: function(category, fxrand) {
+        const categoryArray = symbols[category];
+        if (!categoryArray || categoryArray.length === 0) return '';
+        const index = Math.floor(fxrand() * categoryArray.length);
+        return categoryArray[index];
+      },
+      
+      // Get a random color name
+      getRandomColor: function(fxrand) {
+        return this.getRandomSymbol('colors.names', fxrand);
+      },
+      
+      // Generate a random pattern using symbols
+      generatePattern: function(length, fxrand) {
+        let pattern = '';
+        for (let i = 0; i < length; i++) {
+          const categoryNames = Object.keys(symbols);
+          const category = categoryNames[Math.floor(fxrand() * categoryNames.length)];
+          if (category === 'colors') continue; // Skip the colors object
+          pattern += this.getRandomSymbol(category, fxrand);
+        }
+        return pattern;
+      },
+      
+      // Generate a glitchy text pattern
+      generateGlitchyText: function(length, fxrand) {
+        let text = '';
+        for (let i = 0; i < length; i++) {
+          const r = fxrand();
+          if (r < 0.4) {
+            text += this.getRandomSymbol('alphanumeric', fxrand);
+          } else if (r < 0.7) {
+            text += this.getRandomSymbol('punctuation', fxrand);
+          } else if (r < 0.9) {
+            text += this.getRandomSymbol('visualPatterns', fxrand);
+          } else {
+            text += this.getRandomSymbol('special', fxrand);
+          }
+        }
+        return text;
+      }
+    };
+  </script>
+  
+  <!-- Load FXHASH integration code -->
+  <script src="fxhash-snippet.js"></script>
+  
+  <!-- Load main sketch -->
+  <script src="sketch.js"></script>
+</body>
+</html>
